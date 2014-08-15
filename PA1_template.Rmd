@@ -1,0 +1,83 @@
+---
+title: "Assignment1"
+output: html_document
+---
+# Reproducible Research Peer Assignment-1
+
+## Part 1(mean total number of steps taken per day):
+```{r,echo=TRUE}
+library(graphics)
+library(plyr)
+##importing data:
+data<-read.csv("./data/activity.csv")
+summary(data)
+
+NumberofNA=sum(is.na(data))
+
+##taking sum:
+data2<-ddply(data,.(date),summarise, Total=sum(steps))
+
+hist(data2$Total,breaks=7,col="GREEN",main="Histogram of steps taken every day",xlab = "Number of Steps")
+
+##MEDIAN OF THE DATA EXCLUDING THE NA:
+median(data2$Total,na.rm=TRUE)
+
+##MEAN OF THE DATA EXCLUDING THE NA:
+mean(data2$Total,na.rm=TRUE)
+
+```
+
+
+# Part 2(Average Daily Activity Pattern):
+```{r,echo=TRUE}
+data3<- ddply(data,.(interval),summarise,Mean = mean(steps,na.rm=TRUE))
+plot(data3$interval,data3$Mean,type='l',xlab="Interval",ylab="Mean")
+
+max<-max(data3$Mean)
+maxInterval<-data3[data3$Mean==max,]$interval
+```
+The 5 minute interval which contains the maximum number of steps taken: `r maxInterval` and the max is:`r max`. The max interval can be interpreted as the time between 8:30-8:35.
+
+
+# Part 3(Imputing missing values)
+```{r,echo=TRUE}
+##Replacing the NA values with the relavent Mean.
+data[is.na(data$steps),]$steps = data3$Mean
+##There are no NA values after replacing NA's.
+summary(data)
+
+data2<-ddply(data,.(date),summarise, Total=sum(steps))
+hist(data2$Total,breaks=7,col="GREEN",main="Histogram of steps taken every day",xlab = "Number of Steps")
+median(data2$Total)
+mean(data2$Total)
+```
+The difference in mean and median due to imputing is pretty less and the number of NA values were `r NumberofNA` before imputing.
+
+#Part 4(differences in activity patterns between weekdays and weekends)
+
+```{r,echo=TRUE}
+day<-weekdays(as.Date(data$date))
+data<-cbind(data,day)
+head(data)
+##Construction of the factor:
+x <-data$day
+x<-as.character(x)
+x[x == "Friday"|x== "Tuesday"|x== "Wednesday"|x== "Thursday"|x== "Monday"] <- "Weekday"
+x[x=="Saturday"|x== "Sunday"] = "Weekend"
+x<-as.factor(x)
+weekFactor<-x
+is.factor(weekFactor)
+data<-cbind(data,weekFactor)
+#indicating whether the day is a weekday or a weekend:
+head(data)
+tail(data)
+
+
+data5<-ddply(data,.(interval,weekFactor),summarise,Mean = mean(steps))
+
+library(ggplot2)
+qplot(interval,Mean,data=data5,facets=weekFactor~.,geom="line")
+
+```
+
+
