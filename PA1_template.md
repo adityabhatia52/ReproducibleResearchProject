@@ -1,7 +1,3 @@
----
-title: "Assignment1"
-output: html_document
----
 # Reproducible Research Peer Assignment-1
 
 ## Part 1(mean total number of steps taken per day):
@@ -34,7 +30,7 @@ data2<-ddply(data,.(date),summarise, Total=sum(steps))
 hist(data2$Total,breaks=7,col="GREEN",main="Histogram of steps taken every day",xlab = "Number of Steps")
 ```
 
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1.png) 
+![plot of chunk plot1](figure/plot1.png) 
 
 ```r
 ##MEDIAN OF THE DATA EXCLUDING THE NA:
@@ -62,7 +58,7 @@ data3<- ddply(data,.(interval),summarise,Mean = mean(steps,na.rm=TRUE))
 plot(data3$interval,data3$Mean,type='l',xlab="Interval",ylab="Mean")
 ```
 
-![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2.png) 
+![plot of chunk plot2](figure/plot2.png) 
 
 ```r
 max<-max(data3$Mean)
@@ -96,7 +92,7 @@ data2<-ddply(data,.(date),summarise, Total=sum(steps))
 hist(data2$Total,breaks=7,col="GREEN",main="Histogram of steps taken every day",xlab = "Number of Steps")
 ```
 
-![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3.png) 
+![plot of chunk plot3](figure/plot3.png) 
 
 ```r
 median(data2$Total)
@@ -186,6 +182,6 @@ library(ggplot2)
 qplot(interval,Mean,data=data5,facets=weekFactor~.,geom="line")
 ```
 
-![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4.png) 
+![plot of chunk plot4](figure/plot4.png) 
 
 

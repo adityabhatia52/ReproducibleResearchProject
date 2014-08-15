@@ -1,11 +1,7 @@
----
-title: "Assignment1"
-output: html_document
----
 # Reproducible Research Peer Assignment-1
 
 ## Part 1(mean total number of steps taken per day):
-```{r,echo=TRUE}
+```{r plot1,echo=TRUE}
 library(graphics)
 library(plyr)
 ##importing data:
@@ -29,7 +25,7 @@ mean(data2$Total,na.rm=TRUE)
 
 
 # Part 2(Average Daily Activity Pattern):
-```{r,echo=TRUE}
+```{r plot2,echo=TRUE}
 data3<- ddply(data,.(interval),summarise,Mean = mean(steps,na.rm=TRUE))
 plot(data3$interval,data3$Mean,type='l',xlab="Interval",ylab="Mean")
 
@@ -40,7 +36,7 @@ The 5 minute interval which contains the maximum number of steps taken: `r maxIn
 
 
 # Part 3(Imputing missing values)
-```{r,echo=TRUE}
+```{r plot3,echo=TRUE}
 ##Replacing the NA values with the relavent Mean.
 data[is.na(data$steps),]$steps = data3$Mean
 ##There are no NA values after replacing NA's.
@@ -55,7 +51,7 @@ The difference in mean and median due to imputing is pretty less and the number 
 
 #Part 4(differences in activity patterns between weekdays and weekends)
 
-```{r,echo=TRUE}
+```{r plot4,echo=TRUE}
 day<-weekdays(as.Date(data$date))
 data<-cbind(data,day)
 head(data)
